@@ -55,6 +55,7 @@
     flex-direction: column;
     align-items: center;
     position: relative;
+    text-shadow: 0px 0px 8px white;
   }
 
   .form {
