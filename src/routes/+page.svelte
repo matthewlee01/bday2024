@@ -4,6 +4,33 @@
   import pillowImg from "$lib/images/pillow.png";
   import nightcapImg from "$lib/images/nightcap.webp";
   import sojuImg from "$lib/images/soju.png";
+
+  let submitting = false;
+  let submitted = false;
+  let message = "";
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+    submitting = true;
+    const formData = new FormData(event.target);
+    try {
+      const response = await fetch("/api/submit-form", {
+        method: "POST",
+        body: JSON.stringify(Object.fromEntries(formData)),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const result = await response.json();
+      message = result.message;
+      submitted = true;
+    } catch (error) {
+      console.error("error submitting form:", error);
+      message = "an error occurred while submitting the form. just text me instead idk.";
+    } finally {
+      submitting = false;
+    }
+  }
 </script>
 
 <div class="container">
@@ -13,7 +40,7 @@
   <img src={nightcapImg} alt="nightcap" class="hanging nightcap" />
   <img src={sojuImg} alt="soju" class="hanging soju" />
   <h1>matthew's lazy bday 2024</h1>
-  <p>july 13, 2024 - 7pm</p>
+  <p>july 12, 2024 - 7pm</p>
   <p>location: my house (SFU)</p>
   <h3>featuring:</h3>
   <ul>
@@ -36,7 +63,7 @@
     <li>your comfiest pyjamas</li>
   </ul>
   <h3>RSVP</h3>
-  <form class="form">
+  <form class="form" on:submit={handleSubmit}>
     <label for="name">name</label>
     <input type="text" id="name" name="name" required />
     <label for="email">email</label>
@@ -45,17 +72,30 @@
       <label for="parking">need parking?</label>
       <input type="checkbox" id="parking" name="parking" />
     </div>
-    <button type="submit">send</button>
+    <button disabled={submitted || submitting} type="submit">{submitted ? "submitted" : submitting ? "submitting..." : "submit"}</button>
+    {#if message}
+      <p>
+        {#each message.split("") as c, i}
+          <span class="oscillate" style:animation-delay={`-${i * 0.1}s`}>{c}</span>
+        {/each}
+      </p>
+    {/if}
   </form>
 </div>
 
 <style>
+  :global(body) {
+    margin: 0;
+  }
   .container {
     display: flex;
     flex-direction: column;
     align-items: center;
     position: relative;
     text-shadow: 0px 0px 8px white;
+    overflow: hidden;
+    min-height: 100vh;
+    padding-top: 2rem;
   }
 
   .form {
@@ -101,9 +141,18 @@
     animation-delay: -16s;
   }
 
+  .oscillate {
+    white-space: pre;
+    animation-name: oscillate;
+    animation-duration: 2.4s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+    display: inline-block;
+  }
+
   @keyframes orbit {
     0% {
-      translate: -50% 50%;
+      translate: -60% 50%;
       z-index: -4;
       opacity: 1;
       scale: 1;
@@ -113,7 +162,7 @@
       scale: 0.7;
     }
     50% {
-      translate: 50% 50%;
+      translate: 60% 50%;
       z-index: -4;
       filter: blur(0px);
       opacity: 1;
@@ -128,10 +177,22 @@
       scale: 1.3;
     }
     100% {
-      translate: -50% 50%;
+      translate: -60% 50%;
       filter: blur(0px);
       opacity: 1;
       scale: 1;
+    }
+  }
+
+  @keyframes oscillate {
+    0% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-4px);
+    }
+    100% {
+      transform: translateY(0);
     }
   }
 </style>
