@@ -38,7 +38,7 @@
   <img src={cassetteImg} alt="cassette" class="hanging cassette" width="569" height="400"/>
   <img src={pillowImg} alt="pillow" class="hanging pillow" width="600" height="337"/>
   <img src={nightcapImg} alt="nightcap" class="hanging nightcap" width="400" height="400"/>
-  <img src={sojuImg} alt="soju" class="hanging soju" widht="300" height="375"/>
+  <img src={sojuImg} alt="soju" class="hanging soju" width="300" height="375"/>
   <h1>matthew's lazy bday 2024</h1>
   <p>july 12, 2024 - 7pm</p>
   <p>location: my house (SFU)</p>
