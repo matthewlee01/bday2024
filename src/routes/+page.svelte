@@ -72,7 +72,6 @@
       <label for="parking">need parking?</label>
       <input type="checkbox" id="parking" name="parking" />
     </div>
-    <button disabled={submitted || submitting} type="submit">{submitted ? "submitted" : submitting ? "submitting..." : "submit"}</button>
     {#if message}
       <p>
         {#each message.split("") as c, i}
@@ -80,6 +79,7 @@
         {/each}
       </p>
     {/if}
+    <button disabled={submitted || submitting} type="submit">{submitted ? "submitted!" : submitting ? "submitting..." : "submit"}</button>
   </form>
 </div>
 
